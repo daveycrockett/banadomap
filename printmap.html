@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript"
+	  src="https://maps.googleapis.com/maps/api/js?sensor=false">
+	</script>
+	<script type="text/javascript" src="jquery.js"></script>
+	<!-- key=API_KEY -->
+</head>
+<body>
+	<!-- 
+	Use this map to capture huge, hi-res maps.  Once you've got it centered
+	where you want and big enough, use LittleSnapper
+	(http://www.realmacsoftware.com/littlesnapper/) 
+	to capture the whole thing as an image 
+	Finally, use PosteRazor (http://posterazor.sourceforge.net/)
+	to split it into a huge multi-page pdf -->
+<style>
+#map {
+  width:  3600px; /* tweak these numbers til it's big enough */
+  height: 2600px; /* tweak these numbers til it's big enough */
+  margin: 20px;
+  float:right;
+}
+
+#legend1 {
+	float:left;
+	width:250px;
+}
+
+#legend2 {
+	width:250px;
+}
+
+#legend3, #legend0 {
+	height:180px;
+	text-align:center;
+}
+
+#legend3 .legend, #legend0 .legend {
+	display:inline-block;
+	height:180px;
+	border-right: solid 2px black;
+	padding-right: 20px;
+	padding-left: 20px;
+	vertical-align: top;
+}
+
+#legend1 .legend, #legend2 .legend {
+	border-bottom: solid 2px black;
+	padding-bottom: 20px;
+}
+
+#container {
+  padding:20px;
+}
+
+img.icon {
+	height:;
+}
+body {
+	font-family: arial, helvetica, sans-serif;
+}
+
+
+</style>
+<script>
+var map;
+var data=[
+{ pos: new google.maps.LatLng(-25.321285,-57.645914), title:'Iglesia Asemblia de Dios Brasilera', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.319908,-57.647608), title:'Escuela Fe y Alegria', type:'escuela' },
+{ pos: new google.maps.LatLng(-25.320774,-57.648268), title:'Clinica San Cayetano', type:'clinica' },
+{ pos: new google.maps.LatLng(-25.320888,-57.648342), title:'Escuela San Cayetano', type:'escuela' },
+{ pos: new google.maps.LatLng(-25.319758,-57.648608), title:'Comisaria', noImage:true },
+{ pos: new google.maps.LatLng(-25.321260,-57.647938), title:'Centro de Formacion Vua Randa', noImage:true },
+{ pos: new google.maps.LatLng(-25.321248,-57.647687), title:'Cico Roga' },
+{ pos: new google.maps.LatLng(-25.321937,-57.645315), title:'Biblioteca de la Radio' },
+{ pos: new google.maps.LatLng(-25.320693,-57.646155), title:'Iglesia Evangelica Belen', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.322012,-57.648887), title:'CAFA' },
+{ pos: new google.maps.LatLng(-25.322548,-57.647649), title:'Iglesia Evangelica de Dios del Paraguay', type:'iglesia', noImage:true },
+{ pos: new google.maps.LatLng(-25.323212,-57.649024), title:'Guarderia Caacupemi' },
+{ pos: new google.maps.LatLng(-25.320825,-57.645470), title:'Guarderia San Cayetano' },
+{ pos: new google.maps.LatLng(-25.320693,-57.646155), title:'Programa de Intervencion Oportuna' },
+{ pos: new google.maps.LatLng(-25.320888,-57.648342), title:'Capilla San Cayetano', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.322608,-57.647374), title:'Iglesia Catolica de Caacupemi', type:'iglesia' },	
+{ pos: new google.maps.LatLng(-25.321244,-57.644985), title:'Iglesia Evangelica de Dios del Paraguay', noImage:true },
+{ pos: new google.maps.LatLng(-25.323143,-57.643740), title:'Escuela San Miguel', type:'escuela' },
+{ pos: new google.maps.LatLng(-25.323790,-57.643498), title:'Iglesia Catolica San Miguel', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.324448,-57.644020), title:'Comedor de Ninos y Ninas de Cateura', type:'comedor' },
+{ pos: new google.maps.LatLng(-25.324448,-57.644020), title:'Plaza San Blas' },
+{ pos: new google.maps.LatLng(-25.322776,-57.645012), title:'Comedor Comunitario', type:'comedor' },
+{ pos: new google.maps.LatLng(-25.322514,-57.644513), title:'Clinica Comunitario San Blas', type:'clinica' },
+{ pos: new google.maps.LatLng(-25.322488,-57.645481), title:'Iglesia Catolica', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.324294,-57.645678), title:'Comedor y Iglesia Evangelica', type:'comedor' },
+{ pos: new google.maps.LatLng(-25.324645,-57.645228), title:'Comedor y Iglesia Koreano', type:'comedor' },
+{ pos: new google.maps.LatLng(-25.326268,-57.647755), title:'Comedor San Blas', type:'comedor', noImage:true },
+{ pos: new google.maps.LatLng(-25.325043,-57.648277), title:'Iglesia Evangelica', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.323715,-57.655163), title:'Recicladora' },
+{ pos: new google.maps.LatLng(-25.324203,-57.655506), title:'Comedor y Iglesia Koreano', type:'comedor', noImage:true },
+{ pos: new google.maps.LatLng(-25.322122,-57.653626), title:'La Escuela Lujan', type:'escuela' },
+{ pos: new google.maps.LatLng(-25.321587,-57.651770), title:'Iglesia Evangelica de Dios Canan', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.323273,-57.645487), title:'Escuela San Blas', type:'escuela' },
+{ pos: new google.maps.LatLng(-25.322055,-57.653977), title:'Iglesia Catolica Verjan Lujan', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.319591,-57.644687), title:'Centro Nutritional', noImage:true },
+{ pos: new google.maps.LatLng(-25.318796,-57.645646), title:'Comedor Tercera Eda', type:'comedor' },
+{ pos: new google.maps.LatLng(-25.318395,-57.646508), title:'Associacion Carrero UNIDO' },
+{ pos: new google.maps.LatLng(-25.319216,-57.648728), title:'Hogar Comunitario Mita Roga' },
+{ pos: new google.maps.LatLng(-25.319795,-57.650969), title:'Clinica Verjan Lujan', type:'clinica' },
+{ pos: new google.maps.LatLng(-25.319792,-57.651376), title:'Iglesia Evangelica Canan', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.317174,-57.648829), title:'Iglesia Evangelica Jerico', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.317950,-57.644605), title:'San Ignacio Tinglado Comunitario de Loyola' },
+{ pos: new google.maps.LatLng(-25.317457,-57.644053), title:'Escuela Piasintini', type:'escuela', noImage:true },
+{ pos: new google.maps.LatLng(-25.317552,-57.644244), title:'Iglesia Catolica San Ignacio de Loyola', type:'iglesia' },
+{ pos: new google.maps.LatLng(-25.325834,-57.646293), title:'Iglesia Catolica Por Venir', type:'iglesia', noImage:true },
+{ pos: new google.maps.LatLng(-25.325912,-57.646379), title:'Comedor Communitario Por Venir', type:'comedor', noImage:true },
+{ pos: new google.maps.LatLng(-25.321135,-57.647814), title:'Cancha De Sport Canones' }, 
+{ pos: new google.maps.LatLng(-25.319783,-57.649362), title:'Cancha De San Ignacio de Loyola' }
+];
+var typeCounts = {};
+var typeStrings = {
+	'other':new Array(),
+	'clinica':new Array(),
+	'iglesia':new Array(),
+	'comedor':new Array(),
+	'escuela':new Array()
+};
+
+function initialize() {
+  var mapOptions = {
+    zoom: 18,
+
+    center: new google.maps.LatLng(-25.321374475,-57.6499975), //center of the map
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map'),
+      mapOptions);
+  google.maps.event.addListener(map, 'click', function(evt) {
+	console.log(evt.latLng.toString());
+  })
+  for (i = 0; i < data.length; i++) {
+    type = 'other';
+    if (data[i]['type']) {
+      type = data[i]['type'];	
+    }
+    if (!typeCounts[type]) {
+      typeCounts[type] = 0;	
+    }
+    iconNum = typeCounts[type]++;
+
+    data[i]['marker'] = new google.maps.Marker({
+	  position: data[i]['pos'],
+	  map: map,
+	  title: data[i]['title'],
+	  icon: 'img/icon/' + type + '/icon_' + iconNum +'.png'
+    });
+    data[i]['infoWindow'] = new google.maps.InfoWindow({
+      content: data[i]['title']
+    });
+    if (data[i]['title']) {
+
+      google.maps.event.addListener(data[i]['marker'], 'click', clickWrapper(i));
+      legendInfo = '<div class="legend"><h4>';
+      if (!data[i]['noImage']) {
+	    legendInfo += '<a href="img/big/' + i + '_big.jpg" target="_blank">';
+      }
+      legendInfo += '<img src="img/icon/' + type + '/icon_' + iconNum + '.png"/>' + data[i]['title'] + '</h4>';
+      if (!data[i]['noImage']) {
+	    legendInfo += '<img src="img/thumb/' + i + '_thumb.jpg"/></a>';
+      }
+      legendInfo += "</div>"
+      typeStrings[type].push(legendInfo);
+    }
+  }
+  var legendOffset = 0;
+  for (type in typeStrings) {
+    if (typeStrings.hasOwnProperty(type)) {
+	  var typeStringArr = typeStrings[type];
+      for (i = 0; i < typeStringArr.length; i++) {
+        $('#legend' + Math.floor(legendOffset / 12)).append(typeStringArr[i]);
+        legendOffset++;
+      }
+    } 
+  }
+}
+
+function clickWrapper(i) {
+	return function() {
+		data[i]['infoWindow'].open(map, data[i]['marker']);
+	}
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<table id="container">
+<tr>
+	<td rowspan="3"><div id="legend1"></div></td>
+	<td><div id="legend0"></div></td>
+	<td rowspan="3"><div id="legend2"><div></td>
+</tr>
+<tr>
+	<td><div id="map"></div></td>
+</tr>
+<tr>
+	<td><div id="legend3"></div></td>
+</tr>
+</table>
+</body>
