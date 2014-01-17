@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript"
+	  src="https://maps.googleapis.com/maps/api/js?sensor=false">
+	</script>
+	<script type="text/javascript" src="jquery.js"></script>
+	<!-- key=API_KEY -->
+</head>
+<body>
+	<!-- 
+	Use this map to capture huge, hi-res maps.  Once you've got it centered
+	where you want and big enough, use LittleSnapper
+	(http://www.realmacsoftware.com/littlesnapper/) 
+	to capture the whole thing as an image 
+	Finally, use PosteRazor (http://posterazor.sourceforge.net/)
+	to split it into a huge multi-page pdf -->
+<style>
+#map {
+  width:  3600px; /* tweak these numbers til it's big enough */
+  height: 2600px; /* tweak these numbers til it's big enough */
+  margin: 20px;
+  float:right;
+}
+
+#legend1 {
+	float:left;
+	width:250px;
+}
+
+#legend2 {
+	width:250px;
+}
+
+#legend3, #legend0 {
+	height:180px;
+	text-align:center;
+}
+
+#legend3 .legend, #legend0 .legend {
+	display:inline-block;
+	height:180px;
+	border-right: solid 2px black;
+	padding-right: 20px;
+	padding-left: 20px;
+	vertical-align: top;
+}
+
+#legend1 .legend, #legend2 .legend {
+	border-bottom: solid 2px black;
+	padding-bottom: 20px;
+}
+
+#container {
+  padding:20px;
+}
+
+img.icon {
+	height:;
+}
+body {
+	font-family: arial, helvetica, sans-serif;
+}
+
+
+</style>
+<script>
+var map;
+
+function initialize() {
+  var mapOptions = {
+    zoom: 18,
+
+    center: new google.maps.LatLng(-25.321374475,-57.6499975), //center of the map
+    mapTypeId: google.maps.MapTypeId.SATELLITE  // ROADMAP, SATELLITE, HYBRID, TERRAIN
+  };
+  map = new google.maps.Map(document.getElementById('map'),
+      mapOptions);
+  google.maps.event.addListener(map, 'click', function(evt) {
+	console.log(evt.latLng.toString());
+  })
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<table id="container">
+<tr>
+	<td rowspan="3"><div id="legend1"></div></td>
+	<td><div id="legend0"></div></td>
+	<td rowspan="3"><div id="legend2"><div></td>
+</tr>
+<tr>
+	<td><div id="map"></div></td>
+</tr>
+<tr>
+	<td><div id="legend3"></div></td>
+</tr>
+</table>
+</body>
